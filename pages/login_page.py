@@ -18,3 +18,15 @@ class LoginPage(BasePage):
 
     def should_be_register_form(self):
         assert self.is_element_present(*LoginPageLocators.REGISTRATION_FORM), "Registration form is not presented on the page"
+
+    def register_new_user(self, email, password):
+        reg_email = self.browser.find_element(*LoginPageLocators.REGISTRATION_EMAIL)
+        reg_password_1 = self.browser.find_element(*LoginPageLocators.REGISTRATION_PASSWORD_1)
+        reg_password_2 = self.browser.find_element(*LoginPageLocators.REGISTRATION_PASSWORD_2)
+        reg_button = self.browser.find_element(*LoginPageLocators.REGISTRATION_SUBMIT)
+        reg_email.send_keys(email)
+        reg_password_1.send_keys(password)
+        reg_password_2.send_keys(password)
+        reg_button.click()
+        assert self.should_be_authorized_user() is None, "User is not authorized, but should be"
+
