@@ -1,6 +1,7 @@
 import pytest
 from pages.product_page import ProductPage
-from time import sleep
+from pages.basket_page import BasketPage
+# from time import sleep
 # pytest.param("http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7", marks=pytest.mark.xfail)
 # PROJ_LINKS = ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
 #                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
@@ -44,15 +45,24 @@ PROJ_LINKS = ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_20
 #     page.add_product_to_basket()
 #     page.should_dissapear_success_message()
 
-def test_guest_should_see_login_link_on_product_page(browser):
-    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
-    page = ProductPage(browser, link)
-    page.open()
-    page.should_be_login_link()
+# def test_guest_should_see_login_link_on_product_page(browser):
+#     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+#     page = ProductPage(browser, link)
+#     page.open()
+#     page.should_be_login_link()
 
-def test_guest_can_go_to_login_page_from_product_page(browser):
+# def test_guest_can_go_to_login_page_from_product_page(browser):
+#     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+#     page = ProductPage(browser, link)
+#     page.open()
+#     page.go_to_login_page()
+#     page.is_guest_on_login_page()
+
+def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = ProductPage(browser, link)
     page.open()
-    page.go_to_login_page()
-    page.is_guest_on_login_page()
+    page.go_to_basket_page()
+    basket_page = BasketPage(browser, browser.current_url)
+    basket_page.is_basket_empty()
+    basket_page.is_empty_basket_message_presented()
