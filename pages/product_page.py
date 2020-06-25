@@ -15,5 +15,15 @@ class ProductPage(BasePage):
 
     def is_product_name_in_basket(self):
         name_product = self.browser.find_element(*ProductPageLocators.PRODUCT_NAME)
-        success_message = self.browser.find_element(*ProductPageLocators.BASKET_SUCCESS_MESSAGE)
+        success_message = self.browser.find_element(*ProductPageLocators.BASKET_SUCCESS_MESSAGE_PRODUCT_NAME)
         assert name_product.text == success_message.text, "Price of product is not equal to basket cost"
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.BASKET_SUCCESS_MESSAGE), "Success message is presented, but should not be"
+
+    def should_dissapear_success_message(self):
+        assert self.is_disappeared(*ProductPageLocators.BASKET_SUCCESS_MESSAGE), "Success message has not dissapeared"
+
+    def is_guest_on_login_page(self):
+        self.go_to_login_page()
+        assert self.browser.current_url == "http://selenium1py.pythonanywhere.com/en-gb/accounts/login/"
