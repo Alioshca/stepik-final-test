@@ -4,14 +4,16 @@ from selenium.webdriver.chrome.options import Options
 
 
 def pytest_addoption(parser):
-    # опция выбора браузера, по умолчанию Хром
+    """Additional console commands to manage browser and application language for tests"""
+
     parser.addoption('--browser_name', action='store', default='chrome', help="Choose browser: chrome or firefox")
-    # опция выбора языка, по умолчанию русский
     parser.addoption('--language', action='store', default='en', help="Choose language")
 
 
 @pytest.fixture(scope="function")
 def browser(request):
+    """Starting parameters for webdriver used in tests"""
+
     browser_name = request.config.getoption("browser_name")
     user_language = request.config.getoption("language")
     browser = None

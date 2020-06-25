@@ -1,21 +1,20 @@
 from .locators import BasePageLocators
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoAlertPresentException
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support import expected_conditions as EC
 import math
+from selenium.common.exceptions import NoAlertPresentException, NoSuchElementException, TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class BasePage():
+    """Test methods for all pages. Inherited by page-classes."""
 
-    def __init__(self, browser, url, timeout=10):
+    def __init__(self, browser, url, timeout=10, is_timeout=False):
+        """Add 'is_timeout=True' parameter to your page class if you need implicit waiting"""
+        
         self.browser = browser
         self.url = url
-        # self.browser.implicitly_wait(timeout)
-
-    def open(self):
-        self.browser.get(self.url)
+        if is_timeout is True:
+            self.browser.implicitly_wait(timeout)
 
     def go_to_basket_page(self):
         link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
@@ -25,8 +24,13 @@ class BasePage():
         link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
         link.click()
 
-    def should_be_login_link(self):
-        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
+    def is_disappeared(self, how, what, timeout=4):
+        try:
+            WebDriverWait(self.browser, timeout, 1, TimeoutException).\
+                until_not(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            return False
+        return True
 
     def is_element_present(self, how, what):
         try:
@@ -42,16 +46,14 @@ class BasePage():
             return True
         return False
 
-    def is_disappeared(self, how, what, timeout=4):
-        try:
-            WebDriverWait(self.browser, timeout, 1, TimeoutException).\
-                until_not(EC.presence_of_element_located((how, what)))
-        except TimeoutException:
-            return False
-        return True
+    def open(self):
+        self.browser.get(self.url)
 
     def should_be_authorized_user(self):
         assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented, probably unauthorised user"
+
+    def should_be_login_link(self):
+        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
 
     def solve_quiz_and_get_code(self):
         alert = self.browser.switch_to.alert
@@ -66,3 +68,13 @@ class BasePage():
             alert.accept()
         except NoAlertPresentException:
             print("No second alert presented")
+
+    def say_thank_you(self):
+        """Thanks to all the lecturers of the course 'Автоматизация тестирования с помощью Selenium и Python' by Stepik.
+
+        Especially thanks to Юлия Лях: 'https://stepik.org/users/19131991'.
+
+        I'd like to share the link of the course with everyone: 'https://stepik.org/course/575'.
+        """
+
+        self.browser.get("https://stepik.org/course/575")

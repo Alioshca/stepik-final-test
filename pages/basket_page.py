@@ -3,6 +3,7 @@ from .locators import BasketPageLocators
 from selenium.webdriver.common.by import By
 
 class BasketPage(BasePage):
+    """Test methods for basket page"""
 
     def is_basket_empty(self):
         assert self.is_not_element_present(*BasketPageLocators.PRODUCT_UNIT), "Product is in basket, but should not be"
